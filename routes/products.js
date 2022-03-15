@@ -5,7 +5,7 @@ module.exports = app => {
 
         db.query('SELECT * FROM Produtos', (err, data) => {
             if(err){
-                return res.status(200).send({ err })
+                return res.status(400).send({ err })
             }else {
                 return res.status(200).send({ data })
             }
@@ -14,9 +14,18 @@ module.exports = app => {
     app.post('/produtos', (req, res)=>{
         db.query('INSERT INTO Produtos (nome, preco, quantidade, validade, tipo_produto_id, fornecedor_id) values (?, ?, ?, ?, ?, ?)', (err, data) => {
             if(err){
-                return res.status(200).send({ err })
+                return res.status(400).send({ err })
             }else {
                 return res.status(200).send({ data })
+            }
+        })
+    })
+    app.delete('/produtos/:id', (req, res)=>{
+        db.query(`DELETE FROM Produtos WHERE id=${req.params.id}`, err => {
+            if(err){
+                return res.status(400).send({ err })
+            }else {
+                return res.status(200).send(req.params)
             }
         })
     })
