@@ -9,4 +9,9 @@ module.exports = app => {
             }]
         })
     })
+    app.post('/produtos', (req, res)=>{
+        res.statusCode = 200
+        res.setHeader('Content-Type', 'application/json')
+        res.json(req.body)
+    })
 }
