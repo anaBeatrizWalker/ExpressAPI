@@ -2,7 +2,7 @@ const db = require('../config/db')
 
 module.exports = app => {
     app.get('/funcionarios', (req, res) => {
-        db.query(`SELECT * FROM Funcionarios`, (err, data) => {
+        db.query('SELECT * FROM Funcionarios', (err, data) => {
             if(err){
                 return res.status(400).send({ err })
             }else{
@@ -11,7 +11,7 @@ module.exports = app => {
         })
     })
     app.get('/funcionarios/:id', (req, res) => {
-        db.query(`SELECT * FROM Funcionarios WHERE id=${req.params.id}`, (err, data) => {
+        db.query('SELECT * FROM Funcionarios WHERE id=?', [req.params.id], (err, data) => {
             if(err){
                 return res.status(400).send({ err })
             }else{
@@ -21,7 +21,7 @@ module.exports = app => {
     })
     app.post('/funcionarios', (req, res) => {
         let field = req.body
-        db.query(`INSERT INTO Funcionarios (nome, cargo, telefone, email) VALUES (?, ?, ?, ?)`, [field.nome, field.cargo, field.telefone, field.email], err => {
+        db.query('INSERT INTO Funcionarios (nome, cargo, telefone, email) VALUES (?, ?, ?, ?)', [field.nome, field.cargo, field.telefone, field.email], err => {
             if(err){
                 return res.status(400).send({ err })
             }else{
@@ -31,20 +31,16 @@ module.exports = app => {
     })
     app.put('/funcionarios/:id', (req, res) => {
         let field = req.body
-        db.query(`UPDATE Funcionarios SET nome='${field.nome}',
-            cargo='${field.cargo}',
-            telefone='${field.telefone}',
-            email='${field.email}'
-            WHERE id=${req.params.id}`, err => {
+        db.query('UPDATE Funcionarios SET nome=?, cargo=?, telefone=?, email=? WHERE id=?', [`'${field.nome}'`, `'${field.cargo}'`, `'${field.telefone}'`, `'${field.email}'`, req.params.id], err => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send(Object.assign(req.params, req.body))
+                return res.status(200).send(Object.assign(req.params, field))
             }
         })
     })
     app.delete('/funcionarios/:id', (req, res) => {
-        db.query(`DELETE FROM Funcionarios WHERE id=${req.params.id}`, err => {
+        db.query(`DELETE FROM Funcionarios WHERE id=?`, [req.params.id], err => {
             if(err){
                 return res.status(400).send({ err })
             }else{
