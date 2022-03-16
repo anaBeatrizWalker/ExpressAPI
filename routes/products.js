@@ -3,7 +3,7 @@ const db = require('../config/db')
 module.exports = app => {
     app.get(`/produtos`, (req, res)=>{
 
-        db.query(`SELECT * FROM Produtos WHERE nome LIKE '%${req.query.termo}%'`, (err, data) => {
+        db.query(`SELECT * FROM Produtos WHERE nome LIKE ?`, [`%${req.query.termo}%`], (err, data) => {
             if(err){
                 return res.status(400).send({ err })
             }else {
