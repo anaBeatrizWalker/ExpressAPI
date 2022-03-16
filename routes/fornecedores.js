@@ -30,7 +30,7 @@ module.exports = app => {
         })
     })
     app.put('/fornecedores/:id', (req, res) => {
-        db.query('UPDATE Fornecedores SET nome=? WHERE id=?', [`'${req.body.nome}'`, req.params.id], (err, data) => {
+        db.query('UPDATE Fornecedores SET nome=? WHERE id=?', [req.body.nome, req.params.id], (err, data) => {
             if(err){
                 return res.status(400).send({ err })
             }else{

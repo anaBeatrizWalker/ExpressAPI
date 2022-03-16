@@ -29,7 +29,7 @@ module.exports = app => {
         })
     })
     app.put('/tipos_produtos/:id', (req, res) => {
-        db.query('UPDATE TiposProduto SET nome=? WHERE id=?', [`'${req.body.nome}'`, req.params.id], err => {
+        db.query('UPDATE TiposProduto SET nome=? WHERE id=?', [req.body.nome, req.params.id], err => {
             if(err){
                 return res.status(400).send({ err })
             }else{

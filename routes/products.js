@@ -33,7 +33,7 @@ module.exports = app => {
     })
     app.put('/produtos/:id', (req, res)=>{
         let field = req.body
-        db.query('UPDATE Produtos SET nome=?, preco=?, quantidade=?, validade=?, tipo_produto_id=?, fornecedor_id=? WHERE id=?', [`'${field.nome}'`, field.preco, field.quantidade, field.validade, field.tipo_produto_id, field.fornecedor_id,, req.params.id], err => {
+        db.query('UPDATE Produtos SET nome=?, preco=?, quantidade=?, validade=?, tipo_produto_id=?, fornecedor_id=? WHERE id=?', [field.nome, field.preco, field.quantidade, field.validade, field.tipo_produto_id, field.fornecedor_id, req.params.id], err => {
             if(err){
                 return res.status(400).send({ err })
             }else {
