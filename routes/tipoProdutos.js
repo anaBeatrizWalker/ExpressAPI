@@ -6,7 +6,7 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({ data })
+                return res.status(200).send({ tipos_produto: data })
             }
         })
     })
@@ -15,25 +15,27 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({ data })
+                return res.status(200).send({ tipo_produto: data[0] })
             }
         })
     })
     app.post('/tipos_produtos', (req, res) => {
-        db.query('INSERT INTO TiposProduto (nome) VALUES (?)', [req.body.nome], err => {
+        let tipo_produto = req.body
+        db.query('INSERT INTO TiposProduto (nome) VALUES (?)', [tipo_produto.nome], (err, data) => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send(req.body)
+                return res.status(200).send({ ...tipo_produto, id: data.insertId})
             }
         })
     })
     app.put('/tipos_produtos/:id', (req, res) => {
-        db.query('UPDATE TiposProduto SET nome=? WHERE id=?', [req.body.nome, req.params.id], err => {
+        let tipo_produto = req.body
+        db.query('UPDATE TiposProduto SET nome=? WHERE id=?', [tipo_produto.nome, req.params.id], err => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send(Object.assign(req.params, req.body))
+                return res.status(200).send({ ...tipo_produto })
             }
         })
     })
@@ -42,7 +44,7 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({id: req.params.id})
+                return res.status(200).send({ deleted_id: req.params.id  })
             }
         })
     })

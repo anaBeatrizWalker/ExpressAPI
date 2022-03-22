@@ -7,7 +7,7 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({ data })
+                return res.status(200).send({ fornecedores: data })
             }
         })
     })
@@ -16,25 +16,27 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({ data })
+                return res.status(200).send({ fornecedor: data[0] })
             }
         })
     })
     app.post('/fornecedores', (req, res) => {
-        db.query(`INSERT INTO Fornecedores (nome) VALUES (?)`, [req.body.nome], (err, data) => {
+        let fornecedor = req.body
+        db.query(`INSERT INTO Fornecedores (nome) VALUES (?)`, [fornecedor.nome], (err, data) => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send(req.body)
+                return res.status(200).send({ ...fornecedor, id: data.insertId })
             }
         })
     })
     app.put('/fornecedores/:id', (req, res) => {
-        db.query('UPDATE Fornecedores SET nome=? WHERE id=?', [req.body.nome, req.params.id], (err, data) => {
+        let fornecedor = req.body
+        db.query('UPDATE Fornecedores SET nome=? WHERE id=?', [fornecedor.nome, req.params.id], (err, data) => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send(Object.assign(req.params, req.body))
+                return res.status(200).send({ ...fornecedor })
             }
         })
     })
@@ -43,7 +45,7 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({ id: req.params.id})
+                return res.status(200).send({ deleted_id: req.params.id})
             }
         })
     })

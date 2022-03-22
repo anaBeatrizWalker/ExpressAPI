@@ -6,7 +6,7 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({ data })
+                return res.status(200).send({ funcionarios: data })
             }
         })
     })
@@ -15,27 +15,27 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({ data })
+                return res.status(200).send({ funcionario: data[0] })
             }
         })
     })
     app.post('/funcionarios', (req, res) => {
-        let field = req.body
-        db.query('INSERT INTO Funcionarios (nome, cargo, telefone, email) VALUES (?, ?, ?, ?)', [field.nome, field.cargo, field.telefone, field.email], err => {
+        let funcionario = req.body
+        db.query('INSERT INTO Funcionarios (nome, cargo, telefone, email) VALUES (?, ?, ?, ?)', [funcionario.nome, funcionario.cargo, funcionario.telefone, funcionario.email], (err, data) => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send(req.body)
+                return res.status(200).send({ ...funcionario, id: data.insertId })
             }
         })
     })
     app.put('/funcionarios/:id', (req, res) => {
-        let field = req.body
-        db.query('UPDATE Funcionarios SET nome=?, cargo=?, telefone=?, email=? WHERE id=?', [field.nome, field.cargo, field.telefone, field.email, req.params.id], err => {
+        let funcionario = req.body
+        db.query('UPDATE Funcionarios SET nome=?, cargo=?, telefone=?, email=? WHERE id=?', [funcionario.nome, funcionario.cargo, funcionario.telefone, funcionario.email, req.params.id], err => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send(Object.assign(req.params, field))
+                return res.status(200).send({ ...funcionario })
             }
         })
     })
@@ -44,7 +44,7 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({id: req.params.id})
+                return res.status(200).send({ deleted_id: req.params.id })
             }
         })
     })

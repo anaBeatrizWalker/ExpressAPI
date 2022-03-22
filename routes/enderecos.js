@@ -6,7 +6,7 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({ data })
+                return res.status(200).send({ enderecos: data })
             }
         })
     })
@@ -15,27 +15,27 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({ data })
+                return res.status(200).send({ endereco: data[0] })
             }
         })
     })
     app.post('/enderecos', (req, res) => {
-        let field = req.body
-        db.query('INSERT INTO Enderecos (fornecedor_id, logradouro, complemento, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?)', [field.fornecedor_id, field.logradouro, field.complemento, field.cidade, field.estado, field.estado, field.cep], err => {
+        let endereco = req.body
+        db.query('INSERT INTO Enderecos (fornecedor_id, logradouro, complemento, cidade, estado, cep) VALUES (?, ?, ?, ?, ?, ?)', [endereco.fornecedor_id, endereco.logradouro, endereco.complemento, endereco.cidade, endereco.estado, endereco.estado, endereco.cep], (err, data) => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send(field)
+                return res.status(200).send({ ...endereco, id: data.insertId })
             }
         })
     })
     app.put('/enderecos/:id', (req, res) => {
-        let field = req.body
-        db.query('UPDATE Enderecos SET fornecedor_id=?, logradouro=?, complemento=?, cidade=?, estado=?, cep=? WHERE id=?', [field.fornecedor_id, field.logradouro, field.complemento, field.cidade, field.estado, field.cep, req.params.id], err => {
+        let endereco = req.body
+        db.query('UPDATE Enderecos SET fornecedor_id=?, logradouro=?, complemento=?, cidade=?, estado=?, cep=? WHERE id=?', [endereco.fornecedor_id, endereco.logradouro, endereco.complemento, endereco.cidade, endereco.estado, endereco.cep, req.params.id], err => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send(Object.assign(req.params, field))
+                return res.status(200).send({ ...endereco })
             }
         })
     })
@@ -44,7 +44,7 @@ module.exports = app => {
             if(err){
                 return res.status(400).send({ err })
             }else{
-                return res.status(200).send({id: req.params.id})
+                return res.status(200).send({ deleted_id: req.params.id })
             }
         })
     })
