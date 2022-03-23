@@ -4,13 +4,15 @@ let consign = require('consign')
 let bodyParser = require('body-parser')
 let app = express()
 
-app.use(bodyParser.urlencoded({ extended: false }))
-
 app.use(cors({
     allowedHeaders:'*',
     origin:'*',
     methods: 'GET, POST, PUT, DELETE'
 }))
+
+app.use(express.json())
+
+app.use(bodyParser.urlencoded({ extended: false }))
 
 consign().include('routes').into(app)
 
